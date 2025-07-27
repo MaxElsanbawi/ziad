@@ -116,15 +116,15 @@ export default function StudentInvoice() {
   };
 
   const handleSubmit = async () => {
-    const { registration_id, CourseID, payment, tax_rate, discount_rate, payment_type, transaction_id } = formData;
+    const { registration_id, CourseID, payment, taxRate, discountRate, paymentType, transactionId } = formData;
     const invoiceData = {
       registration_id,
       CourseID,
       payment,
-      tax_rate,
-      discount_rate,
-      payment_type,
-      transaction_id,
+      tax_rate: taxRate,
+      discount_rate: discountRate,
+      payment_type: paymentType,
+      transaction_id: transactionId,
     };
 
     try {

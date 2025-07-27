@@ -4,9 +4,11 @@ import html2pdf from 'html2pdf.js';
 
 export default function StudentInvoice() {
   const { state } = useLocation();
+  const [isExistingInvoice, setIsExistingInvoice] = useState(false);
   const [formData, setFormData] = useState({
+    registration_id: null,
+    CourseID: null,
     courseName: '',
-    courseCode: '',
     coursePrice: 0,
     taxRate: 15,
     discountRate: 0,
@@ -25,14 +27,45 @@ export default function StudentInvoice() {
   const [printMode, setPrintMode] = useState(false);
 
   useEffect(() => {
-    // Update formData with state values when component mounts
-    if (state) {
-      setFormData(prev => ({
-        ...prev,
-        ...state,
-        startDate: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.startDate
-      }));
-    }
+    const fetchInvoice = async () => {
+      if (state && state.registrationId) {
+        try {
+          const response = await fetch(`http://localhost:3000/api/invoices/registration/${state.registrationId}`);
+          if (response.ok) {
+            const data = await response.json();
+            setFormData(prev => ({
+              ...prev,
+              ...data,
+              registration_id: state.registrationId,
+              CourseID: state.CourseID,
+              startDate: data.start_date ? new Date(data.start_date).toLocaleDateString() : prev.startDate,
+              date: data.date ? new Date(data.date).toLocaleDateString() : prev.date,
+            }));
+            setIsExistingInvoice(true);
+          } else {
+            setFormData(prev => ({
+              ...prev,
+              ...state,
+              registration_id: state.registrationId,
+              CourseID: state.CourseID,
+              startDate: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.startDate
+            }));
+            setIsExistingInvoice(false);
+          }
+        } catch (error) {
+          console.error('Error fetching invoice:', error);
+          setFormData(prev => ({
+            ...prev,
+            ...state,
+            registration_id: state.registrationId,
+            CourseID: state.CourseID,
+            startDate: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.startDate
+          }));
+        }
+      }
+    };
+
+    fetchInvoice();
   }, [state]);
 
   const handleInputChange = (field, value) => {
@@ -79,6 +112,54 @@ export default function StudentInvoice() {
       console.error('Error generating PDF:', error);
     } finally {
       setPrintMode(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const { registration_id, CourseID, payment, tax_rate, discount_rate, payment_type, transaction_id } = formData;
+    const invoiceData = {
+      registration_id,
+      CourseID,
+      payment,
+      tax_rate,
+      discount_rate,
+      payment_type,
+      transaction_id,
+    };
+
+    try {
+      let response;
+      if (isExistingInvoice) {
+        response = await fetch(`http://localhost:3000/api/invoices/${registration_id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(invoiceData),
+        });
+      } else {
+        response = await fetch('http://localhost:3000/api/invoices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(invoiceData),
+        });
+      }
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message);
+        if (!isExistingInvoice) {
+          setFormData(prev => ({
+            ...prev,
+            invoiceNumber: result.invoice_number,
+          }));
+          setIsExistingInvoice(true);
+        }
+      } else {
+        alert(`Error: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error submitting invoice:', error);
+      alert('An error occurred while submitting the invoice.');
     }
   };
 
@@ -255,14 +336,14 @@ export default function StudentInvoice() {
             </label>
             {printMode ? (
               <span className="px-3 py-2 w-32 text-center inline-block border border-gray-200 bg-gray-50 rounded">
-                {state?.registrationId}
+                {formData.registration_id}
               </span>
             ) : (
               <input
                 type="text"
-                value={formData.studentId}
-                onChange={e => handleInputChange('studentId', e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 w-32 text-center"
+                value={formData.registration_id || ''}
+                readOnly
+                className="border border-gray-300 rounded px-3 py-2 w-32 text-center bg-gray-100"
               />
             )}
           </div>
@@ -277,14 +358,14 @@ export default function StudentInvoice() {
             </label>
             {printMode ? (
               <span className="px-3 py-2 w-40 text-center inline-block border border-gray-200 bg-gray-50 rounded">
-                {formData.registrationNationalId || ' '}
+                {formData.invoice_number || ' '}
               </span>
             ) : (
               <input
                 type="text"
-                value={formData.invoiceNumber}
-                onChange={e => handleInputChange('invoiceNumber', e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 w-40 text-center"
+                value={formData.invoice_number || ''}
+                readOnly
+                className="border border-gray-300 rounded px-3 py-2 w-40 text-center bg-gray-100"
               />
             )}
           </div>
@@ -296,14 +377,14 @@ export default function StudentInvoice() {
             </label>
             {printMode ? (
               <span className="px-3 py-2 w-40 text-center inline-block border border-gray-200 bg-gray-50 rounded">
-                {formData.studentName || ' '}
+                {formData.student_name || ' '}
               </span>
             ) : (
               <input
                 type="text"
-                value={formData.studentName}
-                onChange={e => handleInputChange('studentName', e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 w-40 text-center"
+                value={formData.student_name || ''}
+                readOnly
+                className="border border-gray-300 rounded px-3 py-2 w-40 text-center bg-gray-100"
               />
             )}
           </div>
@@ -320,9 +401,9 @@ export default function StudentInvoice() {
             ) : (
               <input
                 type="email"
-                value={formData.email}
-                onChange={e => handleInputChange('email', e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 flex-1 text-center"
+                value={formData.email || ''}
+                readOnly
+                className="border border-gray-300 rounded px-3 py-2 flex-1 text-center bg-gray-100"
               />
             )}
           </div>
@@ -339,9 +420,9 @@ export default function StudentInvoice() {
             ) : (
               <input
                 type="tel"
-                value={formData.phone}
-                onChange={e => handleInputChange('phone', e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 w-40 text-center"
+                value={formData.phone || ''}
+                readOnly
+                className="border border-gray-300 rounded px-3 py-2 w-40 text-center bg-gray-100"
               />
             )}
           </div>
@@ -464,6 +545,12 @@ export default function StudentInvoice() {
         <select className="border border-gray-300 rounded px-3 py-2 text-sm mb-2">
           <option>اختيار المطبوعات</option>
         </select>
+        <button
+          onClick={handleSubmit}
+          className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700"
+        >
+          حفظ الفاتورة
+        </button>
         <button
           onClick={generatePDF}
           className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700"

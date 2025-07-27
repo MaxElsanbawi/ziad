@@ -2,21 +2,13 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "#074d84", // Dark teal
+        secondary: "#074d84", // Warm orange
       },
-      keyframes: {
-        rotate: {
-          "0%": { transform: "rotate(0deg)" },
-          "100%": { transform: "rotate(360deg)" },
-        },
-      },
-      animation: {
-        spinSlow: "rotate 10s linear infinite ",
-
+      fontFamily: {
+        sans: ["IBM Plex Sans Arabic", "sans-serif"],
       },
     },
   },

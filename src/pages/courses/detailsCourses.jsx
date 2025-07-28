@@ -249,23 +249,23 @@ const CourseDetails = () => {
   };
 
   // Generate Invoice PDF
- const generateInvoice = (registration) => {
-  // Collect all the data you want to send
-  const invoiceData = {
-    // Example fields, add all you need
-    courseName: course.CourseName,
-    coursesdays:course.StartingTime,
-    coursePrice: course.Price,
-    studentName: registration.FullName,
-    email: registration.Email,
-    phone: registration.PhoneNumber,
-    registrationId :registration.RegistrationID,
-    registrationNationalId :registration.NationalId,
-    // ...add more fields as needed
-  };
+//  const generateInvoice = (registration) => {
+//   // Collect all the data you want to send
+//   const invoiceData = {
+//     // Example fields, add all you need
+//     courseName: course.CourseName,
+//     coursesdays:course.StartingTime,
+//     coursePrice: course.Price,
+//     studentName: registration.FullName,
+//     email: registration.Email,
+//     phone: registration.PhoneNumber,
+//     registrationId :registration.RegistrationID,
+//     registrationNationalId :registration.NationalId,
+//     // ...add more fields as needed
+//   };
 
-  navigate('/students/invoice', { state: invoiceData });
-};
+//   navigate('/students/invoice', { state: invoiceData });
+// };
   // Filter registrations based on search query and status filter
   const filteredRegistrations = registrations.filter((registration) => {
     const matchesSearch =
@@ -1086,14 +1086,14 @@ const CourseDetails = () => {
                             </div>
                           </td>
                           <td className="px-3 md:px-6 py-2 md:py-4 text-right text-xs md:text-sm block md:table-cell">
-                            <button
+                            {/* <button
                               onClick={() => generateInvoice(registration)}
                               className="flex items-center justify-center bg-green-500 text-white px-2 md:px-3 py-1 rounded hover:bg-green-600 focus:outline-none text-xs md:text-sm"
                             >
                               <Download size={14} className="ml-1" />
                               <span className="hidden sm:inline">فاتورة</span>
                               <span className="sm:hidden">فاتورة</span>
-                            </button>
+                            </button> */}
                           </td>
                         </tr>
                       ))}

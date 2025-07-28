@@ -5,9 +5,11 @@ import html2pdf from 'html2pdf.js';
 export default function StudentInvoice() {
   const { state } = useLocation();
   const [isExistingInvoice, setIsExistingInvoice] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     registration_id: null,
-    CourseID: null,
+    CourseID: state?.CourseID || null,
     course_name: '',
     course_price: 0,
     tax_rate: 10,
@@ -28,55 +30,67 @@ export default function StudentInvoice() {
 
   useEffect(() => {
     const fetchInvoice = async () => {
-      if (state && state.registrationId) {
-        try {
-          const response = await fetch(`http://localhost:3000/api/invoices/registration/${state.registrationId}`);
-          if (response.ok) {
-            const data = await response.json();
-            setFormData(prev => ({
-              ...prev,
-              ...data,
-              registration_id: state.registrationId,
-              CourseID: state.CourseID,
-              start_date: data.start_date ? new Date(data.start_date).toLocaleDateString() : prev.start_date,
-              date: data.date ? new Date(data.date).toLocaleDateString() : prev.date,
-            }));
-            setIsExistingInvoice(true);
-          } else {
-            setFormData(prev => ({
-              ...prev,
-              ...state,
-              registration_id: state.registrationId,
-              CourseID: state.CourseID,
-              student_name: state.studentName,
-              email: state.email,
-              phone: state.phone,
-              course_name: state.courseName,
-              course_price: state.coursePrice,
-              start_date: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.start_date
-            }));
-            setIsExistingInvoice(false);
-          }
-        } catch (error) {
-          console.error('Error fetching invoice:', error);
+      if (!state?.registrationId) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const response = await fetch(`http://localhost:3000/api/invoices/registration/${state.registrationId}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setFormData(prev => ({
+            ...prev,
+            ...data,
+            registration_id: state.registrationId,
+            CourseID: state.CourseID || prev.CourseID,
+            start_date: data.start_date ? new Date(data.start_date).toLocaleDateString() : prev.start_date,
+            date: data.date ? new Date(data.date).toLocaleDateString() : prev.date,
+          }));
+          setIsExistingInvoice(true);
+        } else {
+          // If no existing invoice, use the state data
           setFormData(prev => ({
             ...prev,
             ...state,
             registration_id: state.registrationId,
-            CourseID: state.CourseID,
-            student_name: state.studentName,
-            email: state.email,
-            phone: state.phone,
-            course_name: state.courseName,
-            course_price: state.coursePrice,
+            CourseID: state.CourseID || prev.CourseID,
+            student_name: state.studentName || prev.student_name,
+            email: state.email || prev.email,
+            phone: state.phone || prev.phone,
+            course_name: state.courseName || prev.course_name,
+            course_price: state.coursePrice || prev.course_price,
+            start_date: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.start_date
+          }));
+          setIsExistingInvoice(false);
+        }
+      } catch (error) {
+        console.error('Error fetching invoice:', error);
+        setError('Failed to load invoice data');
+        // Fallback to state data if available
+        if (state) {
+          setFormData(prev => ({
+            ...prev,
+            ...state,
+            registration_id: state.registrationId,
+            CourseID: state.CourseID || prev.CourseID,
+            student_name: state.studentName || prev.student_name,
+            email: state.email || prev.email,
+            phone: state.phone || prev.phone,
+            course_name: state.courseName || prev.course_name,
+            course_price: state.coursePrice || prev.course_price,
             start_date: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.start_date
           }));
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchInvoice();
-  }, [state]);
+  }, [state, state?.registrationId, state?.CourseID]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -104,28 +118,37 @@ export default function StudentInvoice() {
   const generatePDF = async () => {
     setPrintMode(true);
     
-    // Wait for the DOM to update
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    const element = document.getElementById('invoice-content');
-    const opt = {
-      margin: 10,
-      filename: `invoice_${formData.invoice_number}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, logging: true, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a3', orientation: 'portrait' }
-    };
-
     try {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const element = document.getElementById('invoice-content');
+      if (!element) {
+        throw new Error('Invoice content element not found');
+      }
+
+      const opt = {
+        margin: 10,
+        filename: `invoice_${formData.invoice_number || 'new'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, logging: true, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
       await html2pdf().set(opt).from(element).save();
     } catch (error) {
       console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF');
     } finally {
       setPrintMode(false);
     }
   };
 
   const handleSubmit = async () => {
+    if (!formData.registration_id) {
+      alert('Registration ID is missing');
+      return;
+    }
+
     const { registration_id, CourseID, payment, tax_rate, discount_rate, payment_type, transaction_id } = formData;
     const invoiceData = {
       registration_id,
@@ -139,40 +162,43 @@ export default function StudentInvoice() {
 
     try {
       let response;
-      if (isExistingInvoice) {
-        response = await fetch(`http://localhost:3000/api/invoices/${registration_id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(invoiceData),
-        });
-      } else {
-        response = await fetch('http://localhost:3000/api/invoices', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(invoiceData),
-        });
+      const endpoint = isExistingInvoice 
+        ? `http://localhost:3000/api/invoices/${registration_id}`
+        : 'http://localhost:3000/api/invoices';
+
+      response = await fetch(endpoint, {
+        method: isExistingInvoice ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(invoiceData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
+      alert(result.message || 'Invoice saved successfully');
 
-      if (response.ok) {
-        alert(result.message);
-        if (!isExistingInvoice) {
-          setFormData(prev => ({
-            ...prev,
-            invoice_number: result.invoice_number,
-          }));
-          setIsExistingInvoice(true);
-        }
-      } else {
-        alert(`Error: ${result.message}`);
+      if (!isExistingInvoice && result.invoice_number) {
+        setFormData(prev => ({
+          ...prev,
+          invoice_number: result.invoice_number,
+        }));
+        setIsExistingInvoice(true);
       }
     } catch (error) {
       console.error('Error submitting invoice:', error);
-      alert('An error occurred while submitting the invoice.');
+      alert(`Failed to save invoice: ${error.message}`);
     }
   };
 
+  if (isLoading) {
+    return <div className="text-center py-8">Loading invoice data...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-8 text-red-600">{error}</div>;
+  }
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 font-sans" dir="rtl" id="invoice-content">
       {/* Header */}

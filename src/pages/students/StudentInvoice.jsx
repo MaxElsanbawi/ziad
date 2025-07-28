@@ -8,20 +8,20 @@ export default function StudentInvoice() {
   const [formData, setFormData] = useState({
     registration_id: null,
     CourseID: null,
-    courseName: '',
-    coursePrice: 0,
-    taxRate: 15,
-    discountRate: 0,
+    course_name: '',
+    course_price: 0,
+    tax_rate: 10,
+    discount_rate: 0,
     payment: 0,
     studentId: '',
-    invoiceNumber: '',
-    studentName: '',
+    invoice_number: '',
+    student_name: '',
     email: '',
     phone: '',
-    startDate: new Date().toLocaleDateString(),
+    start_date: new Date().toLocaleDateString(),
     date: new Date().toLocaleDateString(),
-    paymentType: 'نقد',
-    transactionId: ''
+    payment_type: 'نقد',
+    transaction_id: ''
   });
 
   const [printMode, setPrintMode] = useState(false);
@@ -38,7 +38,7 @@ export default function StudentInvoice() {
               ...data,
               registration_id: state.registrationId,
               CourseID: state.CourseID,
-              startDate: data.start_date ? new Date(data.start_date).toLocaleDateString() : prev.startDate,
+              start_date: data.start_date ? new Date(data.start_date).toLocaleDateString() : prev.start_date,
               date: data.date ? new Date(data.date).toLocaleDateString() : prev.date,
             }));
             setIsExistingInvoice(true);
@@ -48,7 +48,12 @@ export default function StudentInvoice() {
               ...state,
               registration_id: state.registrationId,
               CourseID: state.CourseID,
-              startDate: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.startDate
+              student_name: state.studentName,
+              email: state.email,
+              phone: state.phone,
+              course_name: state.courseName,
+              course_price: state.coursePrice,
+              start_date: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.start_date
             }));
             setIsExistingInvoice(false);
           }
@@ -59,7 +64,12 @@ export default function StudentInvoice() {
             ...state,
             registration_id: state.registrationId,
             CourseID: state.CourseID,
-            startDate: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.startDate
+            student_name: state.studentName,
+            email: state.email,
+            phone: state.phone,
+            course_name: state.courseName,
+            course_price: state.coursePrice,
+            start_date: state.coursesdays ? new Date(state.coursesdays).toLocaleDateString() : prev.start_date
           }));
         }
       }
@@ -81,9 +91,9 @@ export default function StudentInvoice() {
       : 0;
   };
 
-  const coursePrice = getValue('coursePrice');
-  const taxRate = getValue('taxRate');
-  const discountRate = getValue('discountRate');
+  const coursePrice = getValue('course_price');
+  const taxRate = getValue('tax_rate');
+  const discountRate = getValue('discount_rate');
   const payment = getValue('payment');
 
   const taxAmount = (coursePrice * taxRate / 100) || 0;
@@ -100,7 +110,7 @@ export default function StudentInvoice() {
     const element = document.getElementById('invoice-content');
     const opt = {
       margin: 10,
-      filename: `invoice_${formData.invoiceNumber}.pdf`,
+      filename: `invoice_${formData.invoice_number}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, logging: true, useCORS: true },
       jsPDF: { unit: 'mm', format: 'a3', orientation: 'portrait' }
@@ -116,15 +126,15 @@ export default function StudentInvoice() {
   };
 
   const handleSubmit = async () => {
-    const { registration_id, CourseID, payment, taxRate, discountRate, paymentType, transactionId } = formData;
+    const { registration_id, CourseID, payment, tax_rate, discount_rate, payment_type, transaction_id } = formData;
     const invoiceData = {
       registration_id,
       CourseID,
       payment,
-      tax_rate: taxRate,
-      discount_rate: discountRate,
-      payment_type: paymentType,
-      transaction_id: transactionId,
+      tax_rate,
+      discount_rate,
+      payment_type,
+      transaction_id,
     };
 
     try {
@@ -150,7 +160,7 @@ export default function StudentInvoice() {
         if (!isExistingInvoice) {
           setFormData(prev => ({
             ...prev,
-            invoiceNumber: result.invoice_number,
+            invoice_number: result.invoice_number,
           }));
           setIsExistingInvoice(true);
         }
@@ -203,14 +213,14 @@ export default function StudentInvoice() {
             </label>
             {printMode ? (
               <span className="px-3 py-2 flex-1 text-center inline-block border border-gray-200 bg-gray-50 rounded">
-                {formData.courseName || ' '}
+                {formData.course_name || ' '}
               </span>
             ) : (
               <input
                 type="text"
-                value={formData.courseName}
-                onChange={e => handleInputChange('courseName', e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 flex-1 text-center"
+                value={formData.course_name}
+                readOnly
+                className="border border-gray-300 rounded px-3 py-2 flex-1 text-center bg-gray-100"
               />
             )}
             <span className="text-sm text-gray-600 w-8">شهادة</span>
@@ -223,14 +233,14 @@ export default function StudentInvoice() {
             </label>
             {printMode ? (
               <span className="px-3 py-2 w-32 text-center inline-block border border-gray-200 bg-gray-50 rounded">
-                {formData.coursePrice || '0'}
+                {formData.course_price || '0'}
               </span>
             ) : (
               <input
                 type="number"
-                value={formData.coursePrice}
-                onChange={e => handleInputChange('coursePrice', e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 w-32 text-center"
+                value={formData.course_price}
+                readOnly
+                className="border border-gray-300 rounded px-3 py-2 w-32 text-center bg-gray-100"
               />
             )}
             <span className="text-sm text-gray-600 w-8">SAR</span>
@@ -263,13 +273,13 @@ export default function StudentInvoice() {
             </label>
             {printMode ? (
               <span className="px-3 py-2 w-32 text-center inline-block border border-gray-200 bg-gray-50 rounded">
-                {formData.taxRate || '0'}
+                {formData.tax_rate || '0'}
               </span>
             ) : (
               <input
                 type="number"
-                value={formData.taxRate}
-                onChange={e => handleInputChange('taxRate', e.target.value)}
+                value={formData.tax_rate}
+                onChange={e => handleInputChange('tax_rate', e.target.value)}
                 className="border border-gray-300 rounded px-3 py-2 w-32 text-center"
               />
             )}
@@ -294,13 +304,13 @@ export default function StudentInvoice() {
             </label>
             {printMode ? (
               <span className="px-3 py-2 w-32 text-center inline-block border border-gray-200 bg-gray-50 rounded">
-                {formData.discountRate || '0'}
+                {formData.discount_rate || '0'}
               </span>
             ) : (
               <input
                 type="number"
-                value={formData.discountRate}
-                onChange={e => handleInputChange('discountRate', e.target.value)}
+                value={formData.discount_rate}
+                onChange={e => handleInputChange('discount_rate', e.target.value)}
                 className="border border-gray-300 rounded px-3 py-2 w-32 text-center"
               />
             )}
@@ -434,14 +444,14 @@ export default function StudentInvoice() {
             </label>
             {printMode ? (
               <span className="px-3 py-2 w-32 text-center inline-block border border-gray-200 bg-gray-50 rounded">
-                {formData.startDate || ' '}
+                {formData.start_date || ' '}
               </span>
             ) : (
               <input
                 type="text"
-                value={formData.startDate}
-                onChange={e => handleInputChange('startDate', e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2 w-32 text-center"
+                value={formData.start_date}
+                readOnly
+                className="border border-gray-300 rounded px-3 py-2 w-32 text-center bg-gray-100"
               />
             )}
           </div>
@@ -461,20 +471,20 @@ export default function StudentInvoice() {
             <input
               type="text"
               value={formData.date}
-              onChange={e => handleInputChange('date', e.target.value)}
-              className="border border-gray-300 rounded px-3 py-2 w-full text-center"
+              readOnly
+              className="border border-gray-300 rounded px-3 py-2 w-full text-center bg-gray-100"
             />
           )}
 
           <h3 className="font-semibold text-gray-800 text-right">طريقة الدفع / Payment Type:</h3>
           {printMode ? (
             <span className="border border-gray-200 bg-gray-50 rounded px-3 py-2 w-full text-center inline-block">
-              {formData.paymentType || ' '}
+              {formData.payment_type || ' '}
             </span>
           ) : (
             <select
-              value={formData.paymentType}
-              onChange={e => handleInputChange('paymentType', e.target.value)}
+              value={formData.payment_type}
+              onChange={e => handleInputChange('payment_type', e.target.value)}
               className="border border-gray-300 rounded px-3 py-2 w-full text-center"
             >
               <option value="شيك">شيك</option>
@@ -487,13 +497,13 @@ export default function StudentInvoice() {
           <h3 className="font-semibold text-gray-800 text-right">المتعامل:</h3>
           {printMode ? (
             <span className="border border-gray-200 bg-gray-50 rounded px-3 py-2 w-full text-center inline-block">
-              {formData.transactionId || ' '}
+              {formData.transaction_id || ' '}
             </span>
           ) : (
             <input
               type="text"
-              value={formData.transactionId}
-              onChange={e => handleInputChange('transactionId', e.target.value)}
+              value={formData.transaction_id}
+              onChange={e => handleInputChange('transaction_id', e.target.value)}
               className="border border-gray-300 rounded px-3 py-2 w-full text-center"
             />
           )}
@@ -514,7 +524,7 @@ export default function StudentInvoice() {
             QR CODE
           </div>
           <p className="text-xs text-gray-500 mt-2 text-center">
-            الرقم المرجعي: {formData.transactionId || ' '}
+            الرقم المرجعي: {formData.transaction_id || ' '}
           </p>
         </div>
 

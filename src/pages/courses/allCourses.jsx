@@ -23,7 +23,7 @@ const AllCourses = () => {
   const fetchCourses = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3000/api/courses');
+      const response = await fetch('https://backend.camels.center/api/courses');
       const data = await response.json();
       setCourses(data);
     } catch (error) {
@@ -45,7 +45,7 @@ const AllCourses = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/courses/${courseId}`, {
+      const response = await fetch(`https://backend.camels.center/api/courses/${courseId}`, {
         method: 'DELETE',
         redirect: 'follow'
       });

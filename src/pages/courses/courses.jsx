@@ -19,7 +19,7 @@ const Courses = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/courses");
+        const response = await fetch("https://backend.camels.center/api/courses");
         const result = await response.json();
         setCourses(result);
 

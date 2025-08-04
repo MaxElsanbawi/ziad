@@ -68,7 +68,7 @@ const CourseDetails = () => {
 
         // Fetch course details
         const courseResponse = await fetch(
-          `http://localhost:3000/api/courses/${courseId}`,
+          `https://backend.camels.center/api/courses/${courseId}`,
           {
             method: "GET",
             redirect: "follow",
@@ -83,7 +83,7 @@ const CourseDetails = () => {
         setCourse(courseResult);
         // Fetch registrations - this won't throw an error if response is not OK
         const registrationsResponse = await fetch(
-          `http://localhost:3000/api/registrations/course/${courseId}`,
+          `https://backend.camels.center/api/registrations/course/${courseId}`,
           {
             method: "GET",
             redirect: "follow",
@@ -138,7 +138,7 @@ const CourseDetails = () => {
   //   const fetchCoursePdfs = async () => {
   //     try {
   //       setPdfsLoading(true);
-  //       const response = await fetch(`http://localhost:3000/api/courses/${courseId}/pdfs`, {
+  //       const response = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, {
   //         method: "GET",
   //       });
   //       if (response.ok) {
@@ -161,7 +161,7 @@ const CourseDetails = () => {
   //   const fetchCourseFiles = async () => {
   //     try {
   //       setFilesLoading(true);
-  //       const response = await fetch(`http://localhost:3000/api/courses/${courseId}/pdfs`, {
+  //       const response = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, {
   //         method: "GET",
   //         redirect: "follow"
   //       });
@@ -224,7 +224,7 @@ const CourseDetails = () => {
 
       // API call
       const response = await fetch(
-        `http://localhost:3000/api/registrations/${registrationId}`,
+        `https://backend.camels.center/api/registrations/${registrationId}`,
         {
           method: "PUT",
           headers: {
@@ -249,23 +249,23 @@ const CourseDetails = () => {
   };
 
   // Generate Invoice PDF
-//  const generateInvoice = (registration) => {
-//   // Collect all the data you want to send
-//   const invoiceData = {
-//     // Example fields, add all you need
-//     courseName: course.CourseName,
-//     coursesdays:course.StartingTime,
-//     coursePrice: course.Price,
-//     studentName: registration.FullName,
-//     email: registration.Email,
-//     phone: registration.PhoneNumber,
-//     registrationId :registration.RegistrationID,
-//     registrationNationalId :registration.NationalId,
-//     // ...add more fields as needed
-//   };
+ const generateInvoice = (registration) => {
+  // Collect all the data you want to send
+  const invoiceData = {
+    // Example fields, add all you need
+    courseName: course.CourseName,
+    CourseID: course.CourseID,
+    coursesdays:course.StartingTime,
+    coursePrice: course.Price,
+    studentName: registration.FullName,
+    email: registration.Email,
+    RegistrationID: registration.RegistrationID,
+    Registrationpn: registration.PhoneNumber,
+    // ...add more fields as needed
+  };
 
-//   navigate('/students/invoice', { state: invoiceData });
-// };
+  navigate('/students/invoice', { state: invoiceData });
+};
   // Filter registrations based on search query and status filter
   const filteredRegistrations = registrations.filter((registration) => {
     const matchesSearch =
@@ -328,7 +328,7 @@ const CourseDetails = () => {
         redirect: "follow",
       };
       const response = await fetch(
-        "http://localhost:3000/api/registrations",
+        "https://backend.camels.center/api/registrations",
         requestOptions
       );      console.log(response);
       if (!response.ok) throw new Error("فشل التسجيل. حاول مرة أخرى.");
@@ -355,7 +355,7 @@ const CourseDetails = () => {
       // Refresh registrations
       // Re-fetch course details (only registrations part)
       const registrationsResponse = await fetch(
-        `http://localhost:3000/api/registrations/course/${courseId}`,
+        `https://backend.camels.center/api/registrations/course/${courseId}`,
         { method: "GET", redirect: "follow" }
       );
       let registrationsResult = [];
@@ -408,7 +408,7 @@ const CourseDetails = () => {
   //       const filename = idx === 0 ? "postman-cloud:///1f05320b-5981-4ff0-9308-421f384716d4" : file.name;
   //       formdata.append("pdfFile", file, filename);
   //     });
-  //     const response = await fetch(`http://localhost:3000/api/courses/${courseId}/pdfs`, {
+  //     const response = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, {
   //       method: "POST",
   //       body: formdata,
   //       redirect: "follow"
@@ -418,7 +418,7 @@ const CourseDetails = () => {
   //     setPdfFiles([null]);
   //     e.target.reset();
   //     // Refresh list
-  //     const refresh = await fetch(`http://localhost:3000/api/courses/${courseId}/pdfs`, { method: "GET" });
+  //     const refresh = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, { method: "GET" });
   //     if (refresh.ok) {
   //       const result = await refresh.json();
   //       setCoursePdfs(Array.isArray(result) ? result : [result]);
@@ -472,11 +472,11 @@ const CourseDetails = () => {
   //       method: "DELETE",
   //       redirect: "follow"
   //     };
-  //     const response = await fetch(`http://localhost:3000/api/courses/${courseId}/pdfs/${encodeURIComponent(fileName)}`, requestOptions);
+  //     const response = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs/${encodeURIComponent(fileName)}`, requestOptions);
   //     if (!response.ok) throw new Error('فشل حذف الملف');
   //     toast.success('تم حذف الملف بنجاح');
   //     // Refresh list
-  //     const refresh = await fetch(`http://localhost:3000/api/courses/${courseId}/pdfs`, { method: "GET" });
+  //     const refresh = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, { method: "GET" });
   //     if (refresh.ok) {
   //       const result = await refresh.json();
   //       setCourseFiles(result.files || []);
@@ -531,7 +531,7 @@ const CourseDetails = () => {
     try {
       // Default to Sunday-Thursday: [0,1,2,3,4]
       const daysOfWeek = [0, 1, 2, 3, 4];
-      const response = await fetch(`http://localhost:3000/api/atendance/courses/${courseId}/schedule`, {
+      const response = await fetch(`https://backend.camels.center/api/atendance/courses/${courseId}/schedule`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ daysOfWeek }),
@@ -1086,14 +1086,14 @@ const CourseDetails = () => {
                             </div>
                           </td>
                           <td className="px-3 md:px-6 py-2 md:py-4 text-right text-xs md:text-sm block md:table-cell">
-                            {/* <button
+                            <button
                               onClick={() => generateInvoice(registration)}
                               className="flex items-center justify-center bg-green-500 text-white px-2 md:px-3 py-1 rounded hover:bg-green-600 focus:outline-none text-xs md:text-sm"
                             >
                               <Download size={14} className="ml-1" />
                               <span className="hidden sm:inline">فاتورة</span>
                               <span className="sm:hidden">فاتورة</span>
-                            </button> */}
+                            </button>
                           </td>
                         </tr>
                       ))}

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from './AuthContext';
-import abad from '../public/abad.png';
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -104,7 +104,7 @@ const Login = () => {
       />
 
       <div className="mt-0 mb-6">
-        <img src={abad} alt="abad Icon" className="" />
+
       </div>
       <div className="bg-white lg:shadow-lg lg:rounded-lg p-8 w-full h-full lg:h-auto lg:max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-primary font-ibm-plex-sans-arabic">

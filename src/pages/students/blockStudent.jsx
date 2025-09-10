@@ -53,7 +53,7 @@ const BlockUnblockUserPage = () => {
 
     try {
       const response = await fetch(
-        "https://backend.camels.center/api/auth/block-user",
+        "https://phpstack-1509731-5843882.cloudwaysapps.com/api/auth/block-user",
         requestOptions
       );
       const result = await response.json();

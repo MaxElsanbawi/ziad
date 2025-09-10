@@ -107,6 +107,7 @@ const unseenCount = Math.max(0, totalPending - lastSeenCount);
       { text: 'كل الطلاب المحظورين', href: '/students/Allblocked' },
 
     ]},
+    {icon: Contact, text: 'الشكوي', href: '/AllComplaints'},
     { icon: Package, text: 'العروض', href: 'OffersImageUpload'},
     { icon: Contact, text: 'عملاؤنا و شركاؤنا', subItems: [
 
@@ -176,7 +177,7 @@ const unseenCount = Math.max(0, totalPending - lastSeenCount);
 
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("https://backend.camels.center/api/registrations");
+        const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/registrations");
         if (!response.ok) throw new Error('Network error');
         const data = await response.json();
         

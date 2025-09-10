@@ -30,7 +30,7 @@ const ProfilePage = () => {
 
       try {
         const response = await fetch(
-          "https://backend.camels.center/api/auth/profile",
+          "https://phpstack-1509731-5843882.cloudwaysapps.com/api/auth/profile",
           requestOptions
         );
 

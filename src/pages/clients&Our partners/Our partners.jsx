@@ -23,7 +23,7 @@ export default function OurPartnersImageUpload() {
 
   const fetchPartners = async () => {
     try {
-      const response = await fetch("https://backend.camels.center/api/OurPartners");
+      const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/OurPartners");
       if (response.ok) {
         const data = await response.json();
         setPartners(data);
@@ -64,7 +64,7 @@ export default function OurPartnersImageUpload() {
         formData.append("image", selectedFile);
       }
 
-      const response = await fetch("https://backend.camels.center/api/OurPartners", {
+      const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/OurPartners", {
         method: "POST",
         body: formData,
       });
@@ -94,7 +94,7 @@ export default function OurPartnersImageUpload() {
   const handleDeletePartner = async (id) => {
     if (window.confirm('هل أنت متأكد من حذف هذا الشريك؟')) {
       try {
-        const response = await fetch(`https://backend.camels.center/api/OurPartners/${id}`, {
+        const response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/OurPartners/${id}`, {
           method: "DELETE",
         });
 

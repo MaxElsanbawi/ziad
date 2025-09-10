@@ -16,6 +16,7 @@ const AddSameCourses = () => {
   const [imagePreview, setImagePreview] = useState('');
   const [price, setPrice] = useState('');
   const [courseType, setCourseType] = useState('OnSite');
+  const [courseTypec, setCourseTypec] = useState('');
   const [courseLink, setCourseLink] = useState('');
   const [categoryID, setCategoryID] = useState('');
   const [courseDays, setCourseDays] = useState('weekdays');
@@ -41,13 +42,13 @@ const AddSameCourses = () => {
     const fetchData = async () => {
       try {
         // Fetch categories
-        const categoriesResponse = await fetch("https://backend.camels.center/api/categories");
+        const categoriesResponse = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/categories");
         if (!categoriesResponse.ok) throw new Error('Failed to fetch categories');
         const categoriesData = await categoriesResponse.json();
         setCategories(categoriesData);
 
         // Fetch trainers
-        const trainersResponse = await fetch("https://backend.camels.center/api/users");
+        const trainersResponse = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/users");
         if (!trainersResponse.ok) throw new Error('Failed to fetch trainers');
         const trainersData = await trainersResponse.json();
         setTrainers(trainersData.filter(user => user.Role === 'trainer'));
@@ -63,7 +64,7 @@ const AddSameCourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("https://backend.camels.center/api/courses");
+        const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses");
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
@@ -107,6 +108,7 @@ const AddSameCourses = () => {
     setDescription(course.Description || '');
     setPrice(course.Price || '');
     setCourseType(course.CourseType || 'OnSite');
+    setCourseTypec(course.CourseTypec || ''); // Assuming CourseTypec is part of the course data
     setCourseLink(course.CourseLink || '');
     setCategoryID(course.CategoryID || '');
     setInstructorID(course.InstructorID || '');
@@ -128,6 +130,7 @@ const AddSameCourses = () => {
     formData.append('CourseName', courseName);
     formData.append('Price', price);
     formData.append('CourseType', courseType);
+    formData.append('CourseTypec', courseTypec); // Add CourseTypec
     formData.append('CourseLink', courseLink);
     formData.append('CategoryID', categoryID);
     formData.append('StartingTime', startingTime);
@@ -141,7 +144,7 @@ const AddSameCourses = () => {
     }
 
     try {
-      const response = await fetch("https://backend.camels.center/api/courses/by-name", {
+      const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/by-name", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${user.token}`
@@ -158,6 +161,7 @@ const AddSameCourses = () => {
         setDescription('');
         setPrice('');
         setCourseType('OnSite');
+        setCourseTypec(''); // Reset CourseTypec
         setCourseLink('');
         setCategoryID('');
         setcoursesRoom('');
@@ -268,6 +272,24 @@ const AddSameCourses = () => {
           >
             <option value="OnSite">حضوري</option>
             <option value="Online">عبر الإنترنت</option>
+          </select>
+        </div>
+
+        {/* Course Type (عام/خاص) */}
+        <div className="mb-4">
+          <label htmlFor="courseTypec" className="block text-sm font-medium text-primary mb-1">
+            نوع الدورة (عام/خاص)
+          </label>
+          <select
+            id="courseTypec"
+            value={courseTypec}
+            onChange={(e) => setCourseTypec(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
+            required
+          >
+
+            <option value="عام">عام</option>
+            <option value="خاص">خاص</option>
           </select>
         </div>
 

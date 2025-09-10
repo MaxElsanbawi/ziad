@@ -24,7 +24,7 @@ const RejectedRegistrations = () => {
     const fetchRegistrations = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://backend.camels.center/api/registrations');
+        const response = await fetch('https://phpstack-1509731-5843882.cloudwaysapps.com/api/registrations');
         
         if (!response.ok) {
           throw new Error('Failed to fetch registrations');

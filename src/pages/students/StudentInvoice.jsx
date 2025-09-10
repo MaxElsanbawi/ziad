@@ -37,7 +37,7 @@ export default function StudentInvoice() {
     const fetchAndSetInvoice = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("https://backend.camels.center/api/invoices");
+        const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/invoices");
         const allInvoices = await response.json();
 
         if (state?.RegistrationID) {
@@ -149,14 +149,14 @@ export default function StudentInvoice() {
     try {
       let response;
       if (formData.existingInvoice) {
-        response = await fetch(`https://backend.camels.center/api/invoices/${formData.RegistrationID}`, {
+        response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/invoices/${formData.RegistrationID}`, {
           method: "PUT",
           headers: myHeaders,
           body: raw,
           redirect: "follow"
         });
       } else {
-        response = await fetch("https://backend.camels.center/api/invoices", {
+        response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/invoices", {
           method: "POST",
           headers: myHeaders,
           body: raw,

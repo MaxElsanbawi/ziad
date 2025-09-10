@@ -41,7 +41,7 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch("https://backend.camels.center/api/auth/login", requestOptions);
+      const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/auth/login", requestOptions);
       const result = await response.json();
       console.log(result)
       if (response.ok) {

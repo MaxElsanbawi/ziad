@@ -68,7 +68,7 @@ const CourseDetailsPartner = () => {
 
         // Fetch course details
         const courseResponse = await fetch(
-          `https://backend.camels.center/api/courses/${courseId}`,
+          `https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}`,
           {
             method: "GET",
             redirect: "follow",
@@ -84,7 +84,7 @@ const CourseDetailsPartner = () => {
 
         // Fetch registrations - this won't throw an error if response is not OK
         const registrationsResponse = await fetch(
-          `https://backend.camels.center/api/registrations/course/${courseId}`,
+          `https://phpstack-1509731-5843882.cloudwaysapps.com/api/registrations/course/${courseId}`,
           {
             method: "GET",
             redirect: "follow",
@@ -139,7 +139,7 @@ const CourseDetailsPartner = () => {
   //   const fetchCoursePdfs = async () => {
   //     try {
   //       setPdfsLoading(true);
-  //       const response = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, {
+  //       const response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}/pdfs`, {
   //         method: "GET",
   //       });
   //       if (response.ok) {
@@ -162,7 +162,7 @@ const CourseDetailsPartner = () => {
   //   const fetchCourseFiles = async () => {
   //     try {
   //       setFilesLoading(true);
-  //       const response = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, {
+  //       const response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}/pdfs`, {
   //         method: "GET",
   //         redirect: "follow"
   //       });
@@ -225,7 +225,7 @@ const CourseDetailsPartner = () => {
 
       // API call
       const response = await fetch(
-        `https://backend.camels.center/api/registrations/${registrationId}`,
+        `https://phpstack-1509731-5843882.cloudwaysapps.com/api/registrations/${registrationId}`,
         {
           method: "PUT",
           headers: {
@@ -451,7 +451,7 @@ const CourseDetailsPartner = () => {
         redirect: "follow",
       };
       const response = await fetch(
-        "https://backend.camels.center/api/registrations",
+        "https://phpstack-1509731-5843882.cloudwaysapps.com/api/registrations",
         requestOptions
       );
       if (!response.ok) throw new Error("فشل التسجيل. حاول مرة أخرى.");
@@ -478,7 +478,7 @@ const CourseDetailsPartner = () => {
       // Refresh registrations
       // Re-fetch course details (only registrations part)
       const registrationsResponse = await fetch(
-        `https://backend.camels.center/api/registrations/course/${courseId}`,
+        `https://phpstack-1509731-5843882.cloudwaysapps.com/api/registrations/course/${courseId}`,
         { method: "GET", redirect: "follow" }
       );
       let registrationsResult = [];
@@ -531,7 +531,7 @@ const CourseDetailsPartner = () => {
   //       const filename = idx === 0 ? "postman-cloud:///1f05320b-5981-4ff0-9308-421f384716d4" : file.name;
   //       formdata.append("pdfFile", file, filename);
   //     });
-  //     const response = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, {
+  //     const response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}/pdfs`, {
   //       method: "POST",
   //       body: formdata,
   //       redirect: "follow"
@@ -541,7 +541,7 @@ const CourseDetailsPartner = () => {
   //     setPdfFiles([null]);
   //     e.target.reset();
   //     // Refresh list
-  //     const refresh = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, { method: "GET" });
+  //     const refresh = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}/pdfs`, { method: "GET" });
   //     if (refresh.ok) {
   //       const result = await refresh.json();
   //       setCoursePdfs(Array.isArray(result) ? result : [result]);
@@ -595,11 +595,11 @@ const CourseDetailsPartner = () => {
   //       method: "DELETE",
   //       redirect: "follow"
   //     };
-  //     const response = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs/${encodeURIComponent(fileName)}`, requestOptions);
+  //     const response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}/pdfs/${encodeURIComponent(fileName)}`, requestOptions);
   //     if (!response.ok) throw new Error('فشل حذف الملف');
   //     toast.success('تم حذف الملف بنجاح');
   //     // Refresh list
-  //     const refresh = await fetch(`https://backend.camels.center/api/courses/${courseId}/pdfs`, { method: "GET" });
+  //     const refresh = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}/pdfs`, { method: "GET" });
   //     if (refresh.ok) {
   //       const result = await refresh.json();
   //       setCourseFiles(result.files || []);

@@ -19,7 +19,7 @@ const DetailsRegistrations = () => {
 
       try {
         const response = await fetch(
-          `https://backend.camels.center/api/registrations/${registrationId}`,
+          `https://phpstack-1509731-5843882.cloudwaysapps.com/api/registrations/${registrationId}`,
           requestOptions
         );
 

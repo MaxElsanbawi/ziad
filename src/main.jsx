@@ -48,6 +48,8 @@ import EditCourses from './pages/courses/editCourse';
 import EditCoursesPartner from './pages/courses/editCoursesPartner';
 import StudentInvoice from './pages/students/StudentInvoice';
 import CourseAttendance from './pages/courses/CourseAttendance';
+import AllComplaints from './pages/complaints/complaints';
+import ComplaintDetails from './pages/complaints/detailsComplaints';
 
 
 export default function App() {
@@ -88,6 +90,8 @@ export default function App() {
               <Route path="CoursesPartner" element={<CoursesPartner />} />
               
               <Route path="/students" element={<Dashboard />} />
+              <Route path="/AllComplaints" element={<AllComplaints />} />
+              <Route path="/complaints/:complaintId/details" element={<ComplaintDetails />} />
 
               <Route path="/students/add" element={<AddStudents />} />
               <Route path="/students/blocked" element={<BlockUnblockUserPage />} />

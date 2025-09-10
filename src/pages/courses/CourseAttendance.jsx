@@ -78,7 +78,7 @@ const CourseAttendance = () => {
         setError("");
 
         const response = await fetch(
-          `https://backend.camels.center/api/atendance/courses/${courseId}/attendance`
+          `https://phpstack-1509731-5843882.cloudwaysapps.com/api/atendance/courses/${courseId}/attendance`
         );
         if (!response.ok) throw new Error("Failed to fetch attendance records");
         const data = await response.json();
@@ -139,7 +139,7 @@ const CourseAttendance = () => {
 
       // Send POST request to backend
       const response = await fetch(
-        `https://backend.camels.center/api/atendance/courses/${courseId}/registrations/${registrationId}/attendance`,
+        `https://phpstack-1509731-5843882.cloudwaysapps.com/api/atendance/courses/${courseId}/registrations/${registrationId}/attendance`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -192,7 +192,7 @@ const CourseAttendance = () => {
     try {
       // Default to Sunday-Thursday: [0,1,2,3,4]
       const daysOfWeek = [0, 1, 2, 3, 4];
-      const response = await fetch(`https://backend.camels.center/api/atendance/courses/${courseId}/schedule`, {
+      const response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/atendance/courses/${courseId}/schedule`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ daysOfWeek }),

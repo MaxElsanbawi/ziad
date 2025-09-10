@@ -58,7 +58,7 @@ const AddStudents = () => {
     };
 
     try {
-      const response = await fetch("https://backend.camels.center/api/users", requestOptions);
+      const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/users", requestOptions);
       const result = await response.json();
 
       if (response.ok) {

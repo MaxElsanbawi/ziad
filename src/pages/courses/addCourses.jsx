@@ -29,6 +29,7 @@ const AddCourses = () => {
   const [error, setError] = useState('');
   const [pdfFiles, setPdfFiles] = useState([null]); // Array of PDF files
   const [specialPdf, setSpecialPdfs] = useState([null]); // Array of PDF files
+  const [courseTypec, setCourseTypec] = useState('');
 
   // State for categories
   const [categories, setCategories] = useState([]);
@@ -44,7 +45,7 @@ const AddCourses = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://backend.camels.center/api/categories", {
+        const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/categories", {
           method: "GET",
           redirect: "follow",
         });
@@ -68,7 +69,7 @@ const AddCourses = () => {
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const response = await fetch("https://backend.camels.center/api/users", {
+        const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/users", {
           method: "GET",
           redirect: "follow",
         });
@@ -162,6 +163,7 @@ const AddCourses = () => {
     setInstructorID('');
     setInstructorName('');
     setError('');
+    setCourseTypec('');
   };
 
   // Handle form submission
@@ -195,6 +197,7 @@ const AddCourses = () => {
     formData.append("Description", description);
     formData.append("Price", price);
     formData.append("CourseType", courseType);
+    formData.append("CourseTypec", courseTypec);
     formData.append("CourseDays", courseDays);
     formData.append("CategoryID", categoryID);
     formData.append("coursesRoom", coursesRoom);
@@ -219,7 +222,7 @@ const AddCourses = () => {
     };
     
     try {
-      const response = await fetch("https://backend.camels.center/api/courses", requestOptions);
+      const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses", requestOptions);
       const result = await response.json();
       
       if (response.ok) {
@@ -490,6 +493,22 @@ const AddCourses = () => {
             </select>
           </div>
 
+          {/* Course Typec Field */}
+          <div className="mb-4">
+            <label htmlFor="courseTypec" className="block text-sm font-medium text-primary mb-1">
+              نوع الدورة
+            </label>
+            <select
+              id="courseTypec"
+              value={courseTypec}
+              onChange={(e) => setCourseTypec(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
+              required
+            >
+              <option value="عام">عام</option>
+              <option value="خاص">خاص</option>
+            </select>
+          </div>
 
           {/* Course Link Field (only shown for online courses) */}
           {courseType === 'Online' && (

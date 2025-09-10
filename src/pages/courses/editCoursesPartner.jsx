@@ -41,7 +41,7 @@ const EditCoursesPartner = () => {
   useEffect(() => {
     const fetchCourseData = async () => {
       try {
-        const response = await fetch(`https://backend.camels.center/api/courses/${courseId}`, {
+        const response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${user?.token}`
@@ -107,7 +107,7 @@ const EditCoursesPartner = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://backend.camels.center/api/categories", {
+        const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/categories", {
           method: "GET",
           redirect: "follow",
         });
@@ -131,7 +131,7 @@ const EditCoursesPartner = () => {
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const response = await fetch("https://backend.camels.center/api/users", {
+        const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/users", {
           method: "GET",
           redirect: "follow",
         });
@@ -263,7 +263,7 @@ const EditCoursesPartner = () => {
     };
     
     try {
-      const response = await fetch(`https://backend.camels.center/api/courses/${courseId}`, requestOptions);
+      const response = await fetch(`https://phpstack-1509731-5843882.cloudwaysapps.com/api/courses/${courseId}`, requestOptions);
       const result = await response.json();
       
       if (response.ok) {

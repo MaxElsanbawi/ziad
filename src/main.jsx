@@ -39,7 +39,7 @@ import BlockUnblockUserPage from './pages/students/blockStudent';
 import BlockedUsers from './pages/students/BlockedUsers';
 import AllCoursesTrainer from './pages/users/allcorcrsestrainer';
 import Trainer1 from './pages/users/allcorcrsestrainer';
-import OurPartnersImageUpload from './pages/clients&Our partners/Our partners';
+import OurPartnersImageUpload from './pages/clients&Our partners/Ourpartners';
 import ClientsImageUpload from './pages/clients&Our partners/clients';
 import OffersImageUpload from './pages/offers/Offers';
 import CoursesPartner from './pages/courses/courcesPartner';

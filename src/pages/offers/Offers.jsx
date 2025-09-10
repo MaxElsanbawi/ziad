@@ -23,7 +23,7 @@ export default function OffersImageUpload() {
 
   const fetchPartners = async () => {
     try {
-      const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/Offers");
+      const response = await fetch("https://phpstack-1509731-5843882.cloudwaysapps.com/api/offers");
       if (response.ok) {
         const data = await response.json();
         setPartners(data);
